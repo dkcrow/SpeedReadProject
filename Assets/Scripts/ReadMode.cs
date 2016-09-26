@@ -159,7 +159,7 @@ public class ReadMode : MonoBehaviour
     {
         if (content.Length <= currentReadIndex )//超出 12>10
         {
-           //todo:换下一本
+           //todo:我也不知道啊啊
             ReadTxt("test");
             MainText.text = content.Substring(currentReadIndex, ReadLen);
         }
