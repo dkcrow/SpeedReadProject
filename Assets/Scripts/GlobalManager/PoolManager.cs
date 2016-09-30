@@ -5,7 +5,7 @@ using System.Collections.Generic;
 /// <summary>
 /// 对象池模板类
 /// </summary>
-public class PoolManager<T> 
+public class PoolManager<T> where T : new()  
 {
 
 
@@ -33,10 +33,10 @@ public class PoolManager<T>
 
         SpawnPools.Clear();
 
-        for (int i = 0; i < maxCount; i++)  
+        for (int i = 0; i < maxCount; i++)
         {
-            T spawn = default(T);
-            spawn = instantiationAction();
+            
+            T spawn = instantiationAction();
             if (null == spawn)
             {
                 Debug.LogError("对象池初始化生成的对象为空");
@@ -53,7 +53,7 @@ public class PoolManager<T>
     /// 从池获取对象  
     /// </summary>
     /// <returns></returns>
-    public T GetFromPools(Action<T> instantiationAction, Action<T> showAction = null)
+    public T GetFromPools(Func<T> instantiationAction, Action<T> showAction = null)
     {
         T toPopSpawn=default(T);
         if (SpawnPools.Count > 0)
@@ -64,7 +64,7 @@ public class PoolManager<T>
         }
         else
         {
-            instantiationAction(toPopSpawn);
+            toPopSpawn=instantiationAction();
         }
         return toPopSpawn;
     }

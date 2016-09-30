@@ -9,6 +9,7 @@ public class NumberRectMode : MonoBehaviour
 
     public GameObject NumberRect;
     public RectTransform ParentRectTransform;
+    private GameObject parent;//把创建的都放在
 
     List<Button>haveShownBtnList=new List<Button>();//已经显示出来的按钮
     List<GameObject> haveShownRectList=new List<GameObject>();//已经显示出来的方块
@@ -24,10 +25,18 @@ public class NumberRectMode : MonoBehaviour
     private int maxPoolCount = 81;
     void InitNumberRect()
     {
-        rectPool.InitIndicatorPool(() =>Instantiate(NumberRect) , maxPoolCount,(o => o.GetComponent<RectTransform>().sizeDelta = Vector2.zero));
+        parent=new GameObject();
+        parent.name = "NumberRectParent";
+        rectPool.InitIndicatorPool(() =>CreateGameObj(NumberRect,parent.transform) , maxPoolCount,(o => o.GetComponent<RectTransform>().sizeDelta = Vector2.zero));
     }
 
 
+    GameObject CreateGameObj(GameObject template,Transform parent)
+    {
+        GameObject go=Instantiate(NumberRect);
+        go.transform.parent = parent;
+        return go;
+    }
     public void SetByLevel(int level)
     {
         Clear();
@@ -77,7 +86,7 @@ public class NumberRectMode : MonoBehaviour
     }
     void InitRect(int i,int j,int number,int rectWidth)
     {
-        GameObject rect = rectPool.GetFromPools(r => Instantiate(NumberRect), o => o.GetComponent<RectTransform>().sizeDelta = Vector2.one);
+        GameObject rect = rectPool.GetFromPools(() => Instantiate(NumberRect), o => o.GetComponent<RectTransform>().sizeDelta = Vector2.one);
       
         RectTransform rectTransform = rect.GetComponent<RectTransform>();
         rectTransform.SetParent(ParentRectTransform);
@@ -93,6 +102,7 @@ public class NumberRectMode : MonoBehaviour
         childText.text = number.ToString();
 
         Button rectBtn = rect.GetComponent<Button>();
+        rectTransform.DOKill(rectTransform);
         rectTransform.DOShakeScale(0.5f);
         haveShownBtnList.Add(rectBtn);
         haveShownRectList.Add(rect);

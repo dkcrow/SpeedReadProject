@@ -19,7 +19,7 @@ public class ReadMode : MonoBehaviour
         Horizantal,
         Verticle,
         Cross,
-        Random
+        Random,
     }
 
    
@@ -48,23 +48,26 @@ public class ReadMode : MonoBehaviour
     private string content;
     void ReadTxt(string txtName)
     {
-        TextAsset textAsset = Instantiate(Resources.Load<TextAsset>(string.Format("article/{0}",txtName)));
-        if (null == textAsset) return;//todo:这里得做容错处理:比如读取一个必定读的到的
+        //TextAsset textAsset = Instantiate(Resources.Load<TextAsset>(string.Format("article/{0}",txtName)));
+        //if (null == textAsset) return;//todo:这里得做容错处理:比如读取一个必定读的到的
 
-        content = textAsset.text;
+         TxtReadManager.GetInstance().BeginRead();
         currentReadIndex = 0;
     }
+
+    private Vector2 _orignalTexPos;
+    private float _orignalWidth;
+    private float _orignalHeight;
     void InitPosArray()
     {
         _textBgTransform = MainText.rectTransform.parent.GetComponent<RectTransform>();
-        Vector2 orignalPos = _textBgTransform.localPosition;
-        float mainTextWidth = _textBgTransform.sizeDelta.x;
-        float mainTextHeight = _textBgTransform.sizeDelta.y;
-        
+        _orignalTexPos = _textBgTransform.anchoredPosition;
+        _orignalWidth = _textBgTransform.sizeDelta.x;
+        _orignalHeight = _textBgTransform.sizeDelta.y;
         //print(mainTextWidth+" "+ mainTextHeight);
         for (int i = 0; i < _textPosArray.Length; i++)
         {
-            _textPosArray[i] = orignalPos + new Vector2(mainTextWidth*(i%2), -mainTextHeight*(i/2)*2);//往下为负数 所以为减(非笛卡尔坐标系)
+            _textPosArray[i] = _orignalTexPos + new Vector2(_orignalWidth * (i%2), -_orignalHeight * (i/2)*2);//往下为负数 所以为减(非笛卡尔坐标系)
             //print(_textPosArray[i]);
         }
       
@@ -86,6 +89,8 @@ public class ReadMode : MonoBehaviour
     }
     void ReSetAll()
     {
+       
+        _textBgTransform.anchoredPosition = _orignalTexPos;
         content = "";
         currentReadIndex = 0;
         index = 0;
@@ -147,6 +152,10 @@ public class ReadMode : MonoBehaviour
                 _textBgTransform.localPosition = _textPosArray[index];
                 ReadNext();
                 break;
+            //case ReadType.Expland:
+            //   BeginTextExpland();
+            //    ReadNext();
+            //    break;
         }
             
     }
@@ -159,7 +168,6 @@ public class ReadMode : MonoBehaviour
     {
         if (content.Length <= currentReadIndex )//超出 12>10
         {
-           //todo:我也不知道啊啊
             ReadTxt("test");
             MainText.text = content.Substring(currentReadIndex, ReadLen);
         }
@@ -176,6 +184,13 @@ public class ReadMode : MonoBehaviour
 
         currentReadIndex += ReadLen;
     }
+
+
+    //void BeginTextExpland()
+    //{
+    //    _textBgTransform.anchoredPosition = Vector2.zero;
+    //    isExpland = true;
+    //}
     //void Play(int index)
     //{
     //    //_textBgTransform.do
@@ -191,8 +206,19 @@ public class ReadMode : MonoBehaviour
     //    }));
     //}
 
-	// Update is called once per frame
-	void Update () {
-	
-	}
+ //   private bool isExpland = false;
+ //   private int maxWidth = 700;
+ //   private int minWidth = 100;
+ //   private int deltaWith=1;//增量
+ //   private float currentWidth;
+	//// Update is called once per frame
+	//void Update () {
+	//    if (isExpland)
+	//    {
+	//        if (currentWidth > maxWidth || currentWidth < minWidth) deltaWith = -deltaWith;
+	//        currentWidth += deltaWith;
+ //           _textBgTransform.sizeDelta = new Vector2(currentWidth, _orignalHeight);
+ //       }
+        
+ //   }
 }

@@ -1,0 +1,5 @@
+必须先在Assest下创建一个Resources文件夹,把prefeb或者纹理等等放入(可以创建子文件夹)
+ var cube = Instantiate(Resources.Load<GameObject>("Prefeb/Cube"));就是实例化Resources/Prefeb/Cube下的一个预设体
+TextAsset textAsset = Resources.Load<TextAsset>(string.Format("article/{0}", txtName));
+这样就可以不用通过拖动的方式把gameobject放到脚本上防止编辑器崩溃引起的引用丢失
+注意：Unity不关有没有场景引用，都会将Resources里的内容全部打入到安装包中，所以注意包可能非常大

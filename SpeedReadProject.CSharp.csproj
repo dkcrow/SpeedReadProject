@@ -84,11 +84,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\GG\gg.cs" />
+    <Compile Include="Assets\Scripts\GlobalManager\EventDisPatcher.cs" />
     <Compile Include="Assets\Scripts\GlobalManager\PoolManager.cs" />
     <Compile Include="Assets\Scripts\GlobalManager\RandomManager.cs" />
-    <Compile Include="Assets\Scripts\NumberRectMode.cs" />
-    <Compile Include="Assets\Scripts\ReadMode.cs" />
+    <Compile Include="Assets\Scripts\GlobalManager\Singlton.cs" />
+    <Compile Include="Assets\Scripts\GlobalManager\TxtReadManager.cs" />
+    <Compile Include="Assets\Scripts\Mode\EyeExplandMode.cs" />
+    <Compile Include="Assets\Scripts\Mode\MaskMode.cs" />
+    <Compile Include="Assets\Scripts\Mode\NumberRectMode.cs" />
+    <Compile Include="Assets\Scripts\Mode\ReadMode.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\DOTween\DOTween.XML" />
@@ -98,6 +102,7 @@
     <None Include="Assets\DOTween\Editor\DOTweenEditor.XML" />
     <None Include="Assets\DOTween\readme.txt" />
     <None Include="Assets\Resources\article\test.txt" />
+    <None Include="Assets\Resources\article\test2.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
 </Project>
