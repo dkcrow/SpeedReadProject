@@ -26,12 +26,35 @@ public class ReadMode : MonoBehaviour
 	// Use this for initialization
 	void Start () {
         Init();
-        ReadTxt("test");
-      BeginTextMov();
+        //ReadTxt("test");
+        BeginTextMov();
+	    RegisterEvent();
+        TxtReadManager.GetInstance().BeginRead();
 
+    }
 
-	}
+    void OnDestroy()
+    {
+        UnRegisterEvent();
+    }
+    void RegisterEvent()
+    {
+        EventDispatcher.GetInstance().RegisterEvent((OnReceiveNextTxtContent));
+    }
 
+    void UnRegisterEvent()
+    {
+        EventDispatcher.GetInstance().UnRegisterEvent((OnReceiveNextTxtContent));
+    }
+
+    void OnReceiveNextTxtContent(object sender, DispatchData data)
+    {
+        TextMov();
+        if (data.EventName == DispatchData.EventNames.READ_NEXT)
+            if (data.Data != null) MainText.text = data.Data.ToString();
+
+       
+    }
     void Init()
     {
         InitPosArray();
@@ -46,14 +69,14 @@ public class ReadMode : MonoBehaviour
     }
     private int currentReadIndex = 0;//当前读到哪里
     private string content;
-    void ReadTxt(string txtName)
-    {
-        //TextAsset textAsset = Instantiate(Resources.Load<TextAsset>(string.Format("article/{0}",txtName)));
-        //if (null == textAsset) return;//todo:这里得做容错处理:比如读取一个必定读的到的
+    //void ReadTxt(string txtName)
+    //{
+    //    //TextAsset textAsset = Instantiate(Resources.Load<TextAsset>(string.Format("article/{0}",txtName)));
+    //    //if (null == textAsset) return;//todo:这里得做容错处理:比如读取一个必定读的到的
 
-         TxtReadManager.GetInstance().BeginRead();
-        currentReadIndex = 0;
-    }
+    //     TxtReadManager.GetInstance().BeginRead();
+    //    currentReadIndex = 0;
+    //}
 
     private Vector2 _orignalTexPos;
     private float _orignalWidth;
@@ -108,22 +131,23 @@ public class ReadMode : MonoBehaviour
 
     void BeginTextMov()
     {
-        InvokeRepeating("TextMov", 0, MovTime);
+        InvokeRepeating("ReadNext", 0, MovTime);
     }
 
-
+    void ReadNext()
+    {
+        TxtReadManager.GetInstance().ReadNext();
+    }
 
     private int index = 0;
     void TextMov()
     {
         switch (CurrentReadType)
         {
-                case ReadType.Horizantal:
+            case ReadType.Horizantal:
 
                 if (index >= _textPosArray.Length) index = 0;
-
                 _textBgTransform.localPosition = _textPosArray[index];
-                ReadNext();
                 index++;
                 break;
             case ReadType.Verticle:
@@ -134,56 +158,48 @@ public class ReadMode : MonoBehaviour
 
                 }
                 _textBgTransform.localPosition = _textPosArray[index];
-                ReadNext();
                 index += 2;
                 break;
             case ReadType.Cross:
 
                 if (index >= _textPosArray.Length) index = 0;
-
                 _textBgTransform.localPosition = _textPosArray[crossQueue[index]];
-                ReadNext();
                 index++;
                 break;
             case ReadType.Random:
 
                 index = Random.Range(0, 10);
-
                 _textBgTransform.localPosition = _textPosArray[index];
-                ReadNext();
                 break;
-            //case ReadType.Expland:
-            //   BeginTextExpland();
-            //    ReadNext();
-            //    break;
         }
-            
+        
+
     }
 
     public int ReadLen = 10;//每次读入的字符长度
     /// <summary>
     /// 指针往下翻
     /// </summary>
-    void ReadNext()
-    {
-        if (content.Length <= currentReadIndex )//超出 12>10
-        {
-            ReadTxt("test");
-            MainText.text = content.Substring(currentReadIndex, ReadLen);
-        }
+    //void ReadNext()
+    //{
+    //    if (content.Length <= currentReadIndex )//超出 12>10
+    //    {
+    //        ReadTxt("test");
+    //        MainText.text = content.Substring(currentReadIndex, ReadLen);
+    //    }
 
-        else if (content.Length < currentReadIndex+ReadLen)//加上后超出6+5>10
-        {
-            MainText.text = content.Substring(currentReadIndex);//不够就直接读完
-        }
-        else//6<10
-        {
-            MainText.text = content.Substring(currentReadIndex, ReadLen);
-        }
+    //    else if (content.Length < currentReadIndex+ReadLen)//加上后超出6+5>10
+    //    {
+    //        MainText.text = content.Substring(currentReadIndex);//不够就直接读完
+    //    }
+    //    else//6<10
+    //    {
+    //        MainText.text = content.Substring(currentReadIndex, ReadLen);
+    //    }
         
 
-        currentReadIndex += ReadLen;
-    }
+    //    currentReadIndex += ReadLen;
+    //}
 
 
     //void BeginTextExpland()

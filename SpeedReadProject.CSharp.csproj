@@ -89,10 +89,14 @@
     <Compile Include="Assets\Scripts\GlobalManager\RandomManager.cs" />
     <Compile Include="Assets\Scripts\GlobalManager\Singlton.cs" />
     <Compile Include="Assets\Scripts\GlobalManager\TxtReadManager.cs" />
+    <Compile Include="Assets\Scripts\GlobalManager\XmlManager.cs" />
+    <Compile Include="Assets\Scripts\Mode\BallRunMode.cs" />
     <Compile Include="Assets\Scripts\Mode\EyeExplandMode.cs" />
     <Compile Include="Assets\Scripts\Mode\MaskMode.cs" />
     <Compile Include="Assets\Scripts\Mode\NumberRectMode.cs" />
     <Compile Include="Assets\Scripts\Mode\ReadMode.cs" />
+    <Compile Include="Assets\Test\test.cs" />
+    <Compile Include="Assets\Test\test2.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\DOTween\DOTween.XML" />
