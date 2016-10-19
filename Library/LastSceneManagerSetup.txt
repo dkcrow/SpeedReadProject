@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/ReadText.unity
+- path: Assets/DoubleBallScene.unity
   isLoaded: 1
   isActive: 1

@@ -22,7 +22,7 @@ public class PoolManager<T> where T : new()
     }
 
     /// <summary>
-    /// 初始化对象池
+    /// 初始化对象池 
     /// </summary>
     /// <param name="instantiationAction">构造该对象所用的方法 new 等</param>
     /// <param name="maxCount">池最大数量</param>

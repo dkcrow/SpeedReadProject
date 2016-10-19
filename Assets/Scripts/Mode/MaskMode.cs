@@ -8,10 +8,12 @@ public class MaskMode : MonoBehaviour
     public enum MaskType
     {
         HorizantalType,//横向
+        VerticalType,//纵向
         ExplandType//横纵同时
     }
 
     public RectTransform MaskPanelTextBG;
+    public RectTransform MaskTextBG;
     public Text MaskText;
     public MaskType CurrentMaskType;
     private float _orignalHeight;
@@ -33,7 +35,10 @@ public class MaskMode : MonoBehaviour
         TxtReadManager.GetInstance().BeginRead();
 
         EventDispatcher.GetInstance().RegisterEvent(OnGetMsg);
-        ChangeMaskType(MaskType.ExplandType);
+        ChangeMaskType(MaskType.HorizantalType);
+
+
+        InvokeRepeating("ReadNext", 0,1);
     }
 
     void OnGetMsg(object sender, DispatchData data)
@@ -41,7 +46,8 @@ public class MaskMode : MonoBehaviour
         switch (data.EventName)
         {
             case DispatchData.EventNames.READ_NEXT:
-                MaskText.text = data.Data.ToString();
+                UpdateExpland();
+                MaskText.text = data.Data.ToString();             
                 break;
                
         }
@@ -53,13 +59,17 @@ public class MaskMode : MonoBehaviour
         switch (maskType)
         {
                 case MaskType.HorizantalType:
-                deltaWidth = 2;
+                deltaWidth = 20;
                 deltaHeight = 0;
                 break;
-                case MaskType.ExplandType:
-                deltaWidth = 2;
-                deltaHeight = 2;
-                break;
+            //    case MaskType.ExplandType://todo:效果不行
+            //    deltaWidth = 20;
+            //    deltaHeight = 20;
+            //    break;
+            //case MaskType.VerticalType:
+            //    deltaWidth = 20;
+            //    deltaHeight = 20;
+            //    break;
         }
         CurrentMaskType = maskType;
         ResetSize();
@@ -73,37 +83,46 @@ public class MaskMode : MonoBehaviour
         MaskPanelTextBG.sizeDelta=new Vector2(_orignalWidth,_orignalHeight);
     }
 
+    
+    void ReadNext()
+    {
+        TxtReadManager.GetInstance().ReadNext((int)(currentWidth/Mathf.Abs(deltaWidth))-2);
+    }
     void UpdateExpland()
     {
         switch (CurrentMaskType)
         {
           case MaskType.HorizantalType:
-                if (currentWidth > maxWidthInHorizantalMode||currentWidth<0)
-                    deltaWidth = -deltaWidth;
-                if (currentWidth < 0)
-                    TxtReadManager.GetInstance().ReadNext();
+                if (currentWidth > maxWidthInHorizantalMode||currentWidth< _orignalWidth)
+                    deltaWidth = -deltaWidth;                   
                     break;
-          case MaskType.ExplandType:
-                if (currentWidth > maxWidthInExplandMode || currentWidth < 0)
-                    deltaWidth = -deltaWidth;
-                if (currentWidth > maxHeightInExplandMode || currentHeight < 0)
-                    deltaHeight = -deltaHeight;
-                if (currentWidth < 0)
-                    TxtReadManager.GetInstance().ReadNext();
-                break;
+          //case MaskType.ExplandType:
+          //      if (currentWidth > maxWidthInExplandMode || currentWidth < 0)
+          //          deltaWidth = -deltaWidth;
+          //      if (currentWidth > maxHeightInExplandMode || currentHeight < 0)
+          //          deltaHeight = -deltaHeight;
+          //      if (currentWidth < 0)
+          //          TxtReadManager.GetInstance().ReadNext();
+          //      break;
         }
 
         currentWidth += deltaWidth;
         currentHeight += deltaHeight;
-        MaskPanelTextBG.sizeDelta=new Vector2(currentWidth,currentHeight);
+        MaskTextBG.sizeDelta=MaskPanelTextBG.sizeDelta=new Vector2(currentWidth,currentHeight);
         
 
 
     }
-	// Update is called once per frame
-	void Update ()
-	{
-	    UpdateExpland();
 
-	}
+    void OnDestroy()
+    {
+        UnRegisterEvent();
+    }
+
+    void UnRegisterEvent()
+    {
+        EventDispatcher.GetInstance().UnRegisterEvent((OnGetMsg));
+    }
+
+  
 }

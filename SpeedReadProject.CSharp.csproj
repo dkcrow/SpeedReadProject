@@ -85,12 +85,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\GlobalManager\EventDisPatcher.cs" />
+    <Compile Include="Assets\Scripts\GlobalManager\ModeManager.cs" />
     <Compile Include="Assets\Scripts\GlobalManager\PoolManager.cs" />
     <Compile Include="Assets\Scripts\GlobalManager\RandomManager.cs" />
     <Compile Include="Assets\Scripts\GlobalManager\Singlton.cs" />
     <Compile Include="Assets\Scripts\GlobalManager\TxtReadManager.cs" />
     <Compile Include="Assets\Scripts\GlobalManager\XmlManager.cs" />
     <Compile Include="Assets\Scripts\Mode\BallRunMode.cs" />
+    <Compile Include="Assets\Scripts\Mode\DoubleBallMode.cs" />
     <Compile Include="Assets\Scripts\Mode\EyeExplandMode.cs" />
     <Compile Include="Assets\Scripts\Mode\MaskMode.cs" />
     <Compile Include="Assets\Scripts\Mode\NumberRectMode.cs" />
@@ -105,6 +107,7 @@
     <None Include="Assets\DOTween\DOTween50.xml" />
     <None Include="Assets\DOTween\Editor\DOTweenEditor.XML" />
     <None Include="Assets\DOTween\readme.txt" />
+    <None Include="Assets\Resources\BallSaver\ballInfo.txt" />
     <None Include="Assets\Resources\article\test.txt" />
     <None Include="Assets\Resources\article\test2.txt" />
   </ItemGroup>
