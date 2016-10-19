@@ -61,7 +61,7 @@ public class DoubleBallMode : MonoBehaviour
 
     void SaveTxt()
     {
-        
+        TxtReadManager.GetInstance().WriteTxt("");
     }
 
     private int redIndex = 0;

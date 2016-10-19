@@ -22,12 +22,14 @@ public class TxtReadManager : SingltonTemplate<TxtReadManager>
     /// txt根目录
     /// </summary>
     private string txtFilePath = "article";
+    private string txtFileName = "article";
     /// <summary>
     /// 设置txt文件根目录
     /// </summary>
-    private void SetTxtPath(string url)
+    private void SetTxtPath(string url,string name)
     {
         txtFilePath = url;
+        txtFileName = name;
     }
     /// <summary>
     /// 文章全部为txt文件,且放在Resources/article下
@@ -37,9 +39,9 @@ public class TxtReadManager : SingltonTemplate<TxtReadManager>
     /// <returns></returns>
     public string ReadTxt(string txtName,bool needDelSpace=true,string txtPath="article")
     {
-        SetTxtPath(txtPath);
+        SetTxtPath(txtPath,txtName);
 
-        TextAsset textAsset = Resources.Load<TextAsset>(string.Format(txtFilePath+"/{0}", txtName));
+        TextAsset textAsset = Resources.Load<TextAsset>(string.Format(txtFilePath+"/{0}", txtFileName));
         if (null == textAsset) content= TxtNameList[0]; //todo:这里得做容错处理:比如读取一个必定读的到的或提示读取失败
 
         if (needDelSpace)
@@ -104,8 +106,8 @@ public class TxtReadManager : SingltonTemplate<TxtReadManager>
     /// </summary>
     /// <param name="txtName">txt名字</param>
     /// <param name="txtContent">内容</param>
-    public void SaveTxt(string txtName, string txtContent)
+    public void WriteTxt( string txtContent)
     {
-        File.WriteAllText(string.Format(txtFilePath + "/{0}", txtName), txtContent);
+        File.WriteAllText(string.Format(txtFilePath + "/{0}", txtFileName), txtContent);
     }
 }
